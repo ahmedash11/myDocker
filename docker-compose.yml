@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+  rabbit-mq:
+    image: rabbitmq:alpine
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "BLABLABLA"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+        - "15672:15672"
+        - "5672:5672"
+
+  redis:
+    image: redis:alpine
+    ports:
+        - "6379:6379"
+
+  user-service:
+    image: hazemelagaty/user-service:2.1
+    command:  bash -c "sleep 10; java -jar ./target/WebServer-1.0-SNAPSHOT-jar-with-dependencies.jar;"
+    depends_on:
+        - rabbit-mq
+
+  web-server:
+    image: hazemelagaty/youtube-server:2.1
+    ports:
+        - "12345:12345"
+    command:  bash -c "sleep 10; java -jar ./target/WebServer-1.0-SNAPSHOT-jar-with-dependencies.jar;"
+    depends_on:
+        - rabbit-mq
+        - redis

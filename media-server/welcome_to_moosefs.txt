@@ -1,0 +1,1 @@
+If you can find this file in /mnt/mfs/ on your client machine - it means MooseFS is working correctly, congratulations!
